@@ -1,30 +1,23 @@
-let words = [
-    { swedish: "hej", spanish: "hola" },
-    { swedish: "tack", spanish: "gracias" },
-    { swedish: "ja", spanish: "sí" },
-    { swedish: "nej", spanish: "no" },
-    { swedish: "god morgon", spanish: "buenos días" },
-    { swedish: "god natt", spanish: "buenas noches" },
-    { swedish: "vatten", spanish: "agua" },
-    { swedish: "bröd", spanish: "pan" },
-    { swedish: "mjölk", spanish: "leche" },
-    { swedish: "kaffe", spanish: "café" },
-    { swedish: "hus", spanish: "casa" },
-    { swedish: "bil", spanish: "coche" },
-    { swedish: "bok", spanish: "libro" },
-    { swedish: "hund", spanish: "perro" },
-    { swedish: "katt", spanish: "gato" }
-];
-
-let currentWord = 0;
-let correctCount = 0;
-let wrongCount = 0;
+let words = [];
 
 function loadWords() {
-    checkRequiredElements();
-    console.log("Words loaded:", words);
-    resetTest();
-    nextWord();
+    const sheetId = '1OZRGexwONIOd6z24yyx9d4CE8NuhDxrfbWj_nh4f0jg';
+    const sheetUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv`;
+
+    fetch(sheetUrl)
+        .then(response => response.text())
+        .then(data => {
+            words = data.split('\n').map(line => {
+                const [swedish, spanish] = line.split(',');
+                return { swedish: swedish.trim(), spanish: spanish.trim() };
+            });
+            console.log("Words loaded:", words);
+            resetTest();
+            nextWord();
+        })
+        .catch(error => {
+            console.error("Error loading words:", error);
+        });
 }
 
 function resetTest() {

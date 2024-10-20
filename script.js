@@ -1,7 +1,7 @@
 let words = [];
 
 function loadWords() {
-    const webAppUrl = 'https://script.google.com/macros/s/AKfycbxr4GW9n36bJVw7QP9PB9HeClsdnntAbeZM3nYAPDuAsueAzEB1Fdnn2iqp9Rzs1XR_/exec';
+    const webAppUrl = 'https://script.google.com/macros/s/AKfycbyuoKsTetfUp1CaL0Ib-MPBDnvu6QIjYGl7fNA3_IPijtmI-IMqPWItJmgVKeHXBvI9/exec';
 
     fetch(webAppUrl)
         .then(response => response.text())

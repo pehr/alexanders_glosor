@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spanska Ordträning</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <h2>Besvarade ord</h2>
+            <ul id="answeredWords"></ul>
+        </div>
+        <div class="main-content">
+            <h1>Spanska Ordträning</h1>
+            <div id="score">Poäng: <span id="correct">0</span> rätt, <span id="wrong">0</span> fel</div>
+            <div id="wordPrompt"></div>
+            <input type="text" id="userInput" placeholder="Skriv översättningen här">
+            <button id="submitBtn">Skicka</button>
+            <button id="restartBtn" style="display: none;">Starta om</button>
+            <div id="feedback"></div>
+            <div id="progress">Ord: <span id="currentWord">0</span>/10</div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

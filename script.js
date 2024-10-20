@@ -1,7 +1,11 @@
 let words = [];
+let currentWord = 0;
+let correctCount = 0;
+let wrongCount = 0;
 
 function loadWords() {
     const webAppUrl = 'https://script.google.com/macros/s/AKfycbwt0TJ9kh7DHml9H4Epd-dWwu4Z23eRVxjEggK8WHftZX2QYBn6MwubbwXgWrXBlTps/exec';
+
     const script = document.createElement('script');
     script.src = `${webAppUrl}?callback=handleWords`;
     script.onerror = function() {
@@ -32,55 +36,34 @@ function resetTest() {
     document.getElementById('correct').textContent = '0';
     document.getElementById('wrong').textContent = '0';
     document.getElementById('answeredWords').innerHTML = '';
-    document.getElementById('userInput').style.display = 'inline-block';
-    document.getElementById('submitBtn').style.display = 'inline-block';
-    document.getElementById('restartBtn').style.display = 'none';
 }
 
 function nextWord() {
-    console.log("Current word index:", currentWord);
-    if (currentWord < 10) {
-        const wordIndex = Math.floor(Math.random() * words.length);
-        const word = words[wordIndex];
+    if (currentWord < 10 && currentWord < words.length) {
+        const word = words[currentWord];
         const isSwedish = Math.random() < 0.5;
-
-        console.log("Selected word:", word);
-        console.log("Is Swedish:", isSwedish);
 
         const promptLanguage = isSwedish ? 'Svenska' : 'Español';
         const targetLanguage = isSwedish ? 'Español' : 'Svenska';
         const promptWord = isSwedish ? word.swedish : word.spanish;
 
-        console.log("Prompt word:", promptWord);
-
-        const wordPromptElement = document.getElementById('wordPrompt');
-        wordPromptElement.innerHTML = `
+        document.getElementById('wordPrompt').innerHTML = `
             <p>Översätt från ${promptLanguage} till ${targetLanguage}:</p>
             <p class="word-to-translate">${promptWord}</p>
         `;
-        wordPromptElement.dataset.answer = isSwedish ? word.spanish : word.swedish;
-        wordPromptElement.dataset.question = promptWord;
+        document.getElementById('wordPrompt').dataset.answer = isSwedish ? word.spanish : word.swedish;
         document.getElementById('userInput').value = '';
         document.getElementById('feedback').textContent = '';
         document.getElementById('currentWord').textContent = currentWord + 1;
-
-        console.log("Word prompt updated:", wordPromptElement.innerHTML);
     } else {
         finishTest();
     }
 }
 
-function finishTest() {
-    document.getElementById('wordPrompt').textContent = 'Övningen är klar!';
-    document.getElementById('userInput').style.display = 'none';
-    document.getElementById('submitBtn').style.display = 'none';
-    document.getElementById('restartBtn').style.display = 'inline-block';
-}
-
 function checkAnswer() {
     const userInput = document.getElementById('userInput').value.trim().toLowerCase();
     const correctAnswer = document.getElementById('wordPrompt').dataset.answer.toLowerCase();
-    const question = document.getElementById('wordPrompt').dataset.question;
+    const question = document.getElementById('wordPrompt').querySelector('.word-to-translate').textContent;
 
     if (userInput === correctAnswer) {
         document.getElementById('feedback').textContent = 'Rätt!';
@@ -109,17 +92,28 @@ function addAnsweredWord(question, answer, isCorrect) {
     answeredWords.appendChild(li);
 }
 
-function checkRequiredElements() {
-    const requiredElements = [
-        'wordPrompt', 'userInput', 'submitBtn', 'restartBtn', 'feedback',
-        'correct', 'wrong', 'currentWord', 'answeredWords'
-    ];
-
-    requiredElements.forEach(elementId => {
-        if (!document.getElementById(elementId)) {
-            console.error(`Required element with id "${elementId}" is missing from the HTML`);
-        }
-    });
+function finishTest() {
+    document.getElementById('wordPrompt').textContent = 'Övningen är klar!';
+    document.getElementById('userInput').style.display = 'none';
+    document.getElementById('submitBtn').style.display = 'none';
+    document.getElementById('restartBtn').style.display = 'inline-block';
 }
 
-document.addEventListener('DOMContentLoaded', loadWords);
+// Event Listeners
+document.addEventListener('DOMContentLoaded', function() {
+    loadWords();
+    
+    document.getElementById('submitBtn').addEventListener('click', checkAnswer);
+    document.getElementById('userInput').addEventListener('keypress', function(event) {
+        if (event.key === 'Enter') {
+            checkAnswer();
+        }
+    });
+    document.getElementById('restartBtn').addEventListener('click', function() {
+        resetTest();
+        nextWord();
+        document.getElementById('userInput').style.display = 'inline-block';
+        document.getElementById('submitBtn').style.display = 'inline-block';
+        this.style.display = 'none';
+    });
+});

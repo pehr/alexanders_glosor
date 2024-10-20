@@ -1,7 +1,7 @@
 let words = [];
 
 function loadWords() {
-    const sheetId = '1OZRGexwONIOd6z24yyx9d4CE8NuhDxrfbWj_nh4f0jg';
+    const sheetId = '2PACX-1vRgJqtsCyz_pbWODZjloPSE7F6HRMaRvVdvK8TpRM5fDSnza5xmeBuUzZxPNoKEAkMRDx7_hCrHWQ1R';
     const sheetUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv`;
 
     fetch(sheetUrl)

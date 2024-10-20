@@ -2,21 +2,27 @@ let words = [];
 
 function loadWords() {
     const webAppUrl = 'https://script.google.com/macros/s/AKfycbwt0TJ9kh7DHml9H4Epd-dWwu4Z23eRVxjEggK8WHftZX2QYBn6MwubbwXgWrXBlTps/exec';
+    const script = document.createElement('script');
+    script.src = `${webAppUrl}?callback=handleWords`;
+    script.onerror = function() {
+        console.error("Error loading words from the server.");
+    };
+    document.body.appendChild(script);
+}
 
-    fetch(webAppUrl)
-        .then(response => response.text())
-        .then(data => {
-            words = data.split('\n').map(line => {
-                const [swedish, spanish] = line.split(',');
-                return { swedish: swedish.trim(), spanish: spanish.trim() };
-            });
-            console.log("Words loaded:", words);
-            resetTest();
-            nextWord();
-        })
-        .catch(error => {
-            console.error("Error loading words:", error);
-        });
+function handleWords(data) {
+    if (data.error) {
+        console.error("Error loading words:", data.error);
+        return;
+    }
+    words = data;
+    console.log("Words loaded:", words);
+    if (words.length > 0) {
+        resetTest();
+        nextWord();
+    } else {
+        console.warn("No words were loaded. Check your Google Sheet.");
+    }
 }
 
 function resetTest() {
@@ -116,32 +122,4 @@ function checkRequiredElements() {
     });
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-    const submitBtn = document.getElementById('submitBtn');
-    const userInput = document.getElementById('userInput');
-    const restartBtn = document.getElementById('restartBtn');
-
-    if (submitBtn) {
-        submitBtn.addEventListener('click', checkAnswer);
-    } else {
-        console.error("Submit button not found in the HTML");
-    }
-
-    if (userInput) {
-        userInput.addEventListener('keypress', function(event) {
-            if (event.key === 'Enter') {
-                checkAnswer();
-            }
-        });
-    } else {
-        console.error("User input field not found in the HTML");
-    }
-
-    if (restartBtn) {
-        restartBtn.addEventListener('click', loadWords);
-    } else {
-        console.error("Restart button not found in the HTML");
-    }
-
-    loadWords();
-});
+document.addEventListener('DOMContentLoaded', loadWords);

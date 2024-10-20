@@ -1,10 +1,9 @@
 let words = [];
 
 function loadWords() {
-    const sheetId = '2PACX-1vRgJqtsCyz_pbWODZjloPSE7F6HRMaRvVdvK8TpRM5fDSnza5xmeBuUzZxPNoKEAkMRDx7_hCrHWQ1R';
-    const sheetUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv`;
+    const webAppUrl = 'https://script.google.com/macros/s/AKfycbxr4GW9n36bJVw7QP9PB9HeClsdnntAbeZM3nYAPDuAsueAzEB1Fdnn2iqp9Rzs1XR_/exec';
 
-    fetch(sheetUrl)
+    fetch(webAppUrl)
         .then(response => response.text())
         .then(data => {
             words = data.split('\n').map(line => {

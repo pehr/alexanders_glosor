@@ -88,7 +88,9 @@ function checkAnswer() {
 function addAnsweredWord(question, answer, isCorrect) {
     const answeredWords = document.getElementById('answeredWords');
     const li = document.createElement('li');
-    li.innerHTML = `${question} <span class="user-answer">${answer}</span>`;
+    const correctAnswer = document.getElementById('wordPrompt').dataset.answer;
+
+    li.innerHTML = `${question} <span class="user-answer">${answer}</span> <span class="correct-answer">(${correctAnswer})</span>`;
     li.classList.add(isCorrect ? 'correct' : 'incorrect');
     answeredWords.appendChild(li);
 }

@@ -36,6 +36,7 @@ function resetTest() {
     document.getElementById('correct').textContent = '0';
     document.getElementById('wrong').textContent = '0';
     document.getElementById('answeredWords').innerHTML = '';
+    shuffle(words);
 }
 
 function nextWord() {
@@ -97,6 +98,14 @@ function finishTest() {
     document.getElementById('userInput').style.display = 'none';
     document.getElementById('submitBtn').style.display = 'none';
     document.getElementById('restartBtn').style.display = 'inline-block';
+}
+
+// Function to shuffle the words array
+function shuffle(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
 }
 
 // Event Listeners
